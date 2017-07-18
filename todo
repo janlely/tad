@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+
+import os
+import click
+import io
+import mysql.connector as cntr
+import manage
+
+config = {
+    'user' : 'root',
+    'password' : 'c509ada97',
+    'host' : '127.0.0.1',
+    'database' : 'd_working'
+}
+
+global conn
+
+@click.command()
+@click.option('-s', '--show-todo', is_flag=True, help='show todo list', default=False)
+@click.option('-d', '--show-done', is_flag=True, help='show done list', default=False)
+@click.option('-a', '--add', help='add new todo', default='')
+@click.option('-k', '--kill', help='kill todo by id', default='')
+@click.option('-m', '--commit', multiple= True, help='commit svn diff stats in specific dirs')
+@click.option('-c', '--count', is_flag=True, help='count how many lines of code you have writen today')
+def todo(show_todo, show_done, add, kill, commit, count):
+    global conn
+    conn = cntr.connect(**config)
+    if show_todo:
+        manage.show_todo(conn)
+    if show_done:
+        manage.show_done(conn)
+    if len(add):
+        manage.add_todo(conn, add)
+    if len(kill):
+        manage.kill_todo(conn, kill)
+    if len(commit) > 0:
+        manage.commit_diff_stat(conn, commit)
+    if count:
+        manage.count_line_today(conn)
+
+
+
+
+
+
+if __name__ == '__main__':
+    todo()
