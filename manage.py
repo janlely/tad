@@ -17,7 +17,7 @@ def show_done(conn):
     print("work have done:")
     for (id, content, answer) in cursor:
         print(" " * 4 + "{}: {}\n".format(id, content))
-        print("解决：{}".format(answer))
+        print("    解决：{}".format(answer))
     cursor.close()
 
 def add_todo(conn, add):
