@@ -46,7 +46,8 @@ DROP TABLE IF EXISTS `t_todo`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_todo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `content` varchar(500) CHARACTER SET utf8 NOT NULL,
+  `content` varchar(500) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `answer` varchar(1000) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0: 未完成, 1:已完成',
