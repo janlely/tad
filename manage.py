@@ -12,11 +12,12 @@ def show_todo(conn):
 
 def show_done(conn):
     cursor = conn.cursor()
-    query = ("SELECT id, content FROM t_todo WHERE status = 1")
+    query = ("SELECT id, content, answer FROM t_todo WHERE status = 1")
     cursor.execute(query)
     print("work have done:")
-    for (id, content) in cursor:
-        print(" " * 4 + "{}: {}".format(id, content))
+    for (id, content, answer) in cursor:
+        print(" " * 4 + "{}: {}\n".format(id, content))
+        print("解决：{}".format(answer))
     cursor.close()
 
 def add_todo(conn, add):
