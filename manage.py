@@ -30,17 +30,16 @@ def add_todo(conn, add):
 
 def kill_todo(conn, kill):
     EDITOR = os.environ.get('EDITOR','vim')
-    file_name = './answer';
+    file_name = '/tmp/answer';
     subprocess.call([EDITOR, file_name])
     with open(file_name, 'r') as f:
-        f.readline()
         answer = f.read()
     cursor = conn.cursor()
     update = ("UPDATE t_todo SET status = 1, answer = '{}' WHERE id = {}".format(answer, kill))
     cursor.execute(update)
     conn.commit()
     print("kill todo success")
-    subprocess.getoutput("sed -ie '2,$d' answer")
+    subprocess.getoutput("sed -ie '2,$d' /tmp/answer")
     cursor.close()
 
 
