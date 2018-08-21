@@ -1,5 +1,13 @@
 import os
 import subprocess
+import time
+
+def getMonStartTime():
+    l = time.localtime(time.time())
+    days_to_mon = l.tm_wday
+    t = (l.tm_year, l.tm_mon, l.tm_mday, 0, 0, 0, l.tm_wday, l.tm_yday, 0) 
+    tt = time.mktime(t)
+    return tt - days_to_mon * 86400
 
 def show_todo(conn):
     cursor = conn.cursor()
@@ -12,11 +20,16 @@ def show_todo(conn):
 
 def show_done(conn):
     cursor = conn.cursor()
-    query = ("SELECT id, content, answer FROM t_todo WHERE status = 1")
+    query = ("SELECT id, content, answer, modified FROM t_todo WHERE status = 1 ORDER BY modified")
     cursor.execute(query)
     print("work have done:")
-    for (id, content, answer) in cursor:
-        print(" " * 4 + "{}: {}\n".format(id, content))
+    t = int(getMonStartTime())
+    flag = False 
+    for (id, content, answer, modified) in cursor:
+        if(not flag and int(modified.timestamp()) > t):
+            print("    DONE THIS WEEK:")
+            flag = not flag
+        print(" " * 4 + "{}: {}".format(id, content))
         print("    解决：{}".format(answer))
     cursor.close()
 
@@ -77,4 +90,5 @@ def count_line_today(conn):
     for (insertions, deletions) in cursor:
         print("today's work")
         print(' ' * 4 + "insertions: {}, deletions: {}".format(insertions, deletions))
+
 
