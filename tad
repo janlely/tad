@@ -18,24 +18,24 @@ global conn
 @click.command()
 @click.option('-s', '--show-todo', is_flag=True, help='show todo list', default=False)
 @click.option('-d', '--show-done', is_flag=True, help='show done list', default=False)
-@click.option('-a', '--add', help='add new todo', default='')
+@click.option('-a', '--add-todo', is_flag=True, help='add new todo', default=False)
 @click.option('-k', '--kill', help='kill todo by id', default='')
 @click.option('-m', '--commit', multiple= True, help='commit svn diff stats in specific dirs')
 @click.option('-c', '--count', is_flag=True, help='count how many lines of code you have writen today')
-def todo(show_todo, show_done, add, kill, commit, count):
+def todo(show_todo, show_done, add_todo, kill, commit, count):
     global conn
     conn = cntr.connect(**config)
     if show_todo:
         manage.show_todo(conn)
-    if show_done:
+    elif show_done:
         manage.show_done(conn)
-    if len(add):
-        manage.add_todo(conn, add)
-    if len(kill):
+    elif add_todo:
+        manage.add_todo(conn)
+    elif len(kill):
         manage.kill_todo(conn, kill)
-    if len(commit) > 0:
+    elif len(commit) > 0:
         manage.commit_diff_stat(conn, commit)
-    if count:
+    elif count:
         manage.count_line_today(conn)
 
 

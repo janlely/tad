@@ -15,6 +15,7 @@ def show_todo(conn):
     cursor.execute(query)
     print("work to do:")
     for (id, content) in cursor:
+        content = content.replace('\n', '\n        ')
         print(" " * 4 + "{}: {}".format(id, content))
     cursor.close()
 
@@ -29,13 +30,19 @@ def show_done(conn):
         if(not flag and int(modified.timestamp()) > t):
             print("    DONE THIS WEEK:")
             flag = not flag
+        answer = answer.replace('\n', '\n        ')
         print(" " * 4 + "{}: {}".format(id, content))
-        print("    解决：{}".format(answer))
+        print("        {}".format(answer))
     cursor.close()
 
-def add_todo(conn, add):
+def add_todo(conn):
+    EDITOR = os.environ.get('EDITOR','vim')
+    file_name = '/tmp/question';
+    subprocess.call([EDITOR, file_name])
+    with open(file_name, 'r') as f:
+        question = f.read()
     cursor = conn.cursor()
-    insert = ("INSERT INTO t_todo (content) VALUES ('{}')".format(add))
+    insert = ("INSERT INTO t_todo (content) VALUES ('{}')".format(question))
     cursor.execute(insert)
     print("add todo success")
     conn.commit()
@@ -52,7 +59,7 @@ def kill_todo(conn, kill):
     cursor.execute(update)
     conn.commit()
     print("kill todo success")
-    subprocess.getoutput("sed -ie '2,$d' /tmp/answer")
+    # subprocess.getoutput("sed -ie '2,$d' /tmp/answer")
     cursor.close()
 
 
