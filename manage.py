@@ -5,7 +5,7 @@ import time
 def getMonStartTime():
     l = time.localtime(time.time())
     days_to_mon = l.tm_wday
-    t = (l.tm_year, l.tm_mon, l.tm_mday, 0, 0, 0, l.tm_wday, l.tm_yday, 0) 
+    t = (l.tm_year, l.tm_mon, l.tm_mday, 0, 0, 0, l.tm_wday, l.tm_yday, 0)
     tt = time.mktime(t)
     return tt - days_to_mon * 86400
 
@@ -25,7 +25,7 @@ def show_done(conn):
     cursor.execute(query)
     print("work have done:")
     t = int(getMonStartTime())
-    flag = False 
+    flag = False
     for (id, content, answer, modified) in cursor:
         if(not flag and int(modified.timestamp()) > t):
             print("    DONE THIS WEEK:")
@@ -41,6 +41,8 @@ def add_todo(conn):
     subprocess.call([EDITOR, file_name])
     with open(file_name, 'r') as f:
         question = f.read()
+    if len(question.strip()) <= 0:
+        return
     cursor = conn.cursor()
     insert = ("INSERT INTO t_todo (content) VALUES ('{}')".format(question))
     cursor.execute(insert)
