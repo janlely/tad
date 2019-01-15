@@ -50,6 +50,26 @@ def add_todo(conn):
     conn.commit()
     cursor.close()
 
+def edit_todo(conn, edit_id):
+    EDITOR = os.environ.get('EDITOR','vim')
+    file_name = '/tmp/question';
+    cursor = conn.cursor()
+    query_content = "SELECT content FROM t_todo WHERE id = {}".format(edit_id)
+    cursor.execute(query_content)
+    with open(file_name, 'w') as f:
+        for content, in cursor:
+            f.write(content)
+    subprocess.call([EDITOR, file_name])
+    with open(file_name, 'r') as f:
+        question = f.read()
+    if len(question.strip()) <= 0:
+        return
+    update = "UPDATE t_todo SET content = '{}' WHERE id = {}".format(question, edit_id)
+    cursor.execute(update)
+    print("edit todo success")
+    conn.commit()
+    cursor.close()
+
 def kill_todo(conn, kill):
     EDITOR = os.environ.get('EDITOR','vim')
     file_name = '/tmp/answer';
