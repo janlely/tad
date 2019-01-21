@@ -17,17 +17,21 @@ global conn
 
 @click.command()
 @click.option('-s', '--show-todo', is_flag=True, help='show todo list', default=False)
+@click.option('-o', '--show-all', is_flag=True, help='show todo list', default=False)
 @click.option('-d', '--show-done', is_flag=True, help='show done list', default=False)
 @click.option('-a', '--add-todo', is_flag=True, help='add new todo', default=False)
 @click.option('-e', '--edit-todo', help='edit a todo', default='')
 @click.option('-k', '--kill', help='kill todo by id', default='')
+@click.option('-l', '--list-topic', is_flag=True, help='list all topics', default=False)
+@click.option('-c', '--create-topic', help='create a topic', default='')
+@click.option('-w', '--switch-current-topic', help='switch current topic', default='')
 # @click.option('-m', '--commit', multiple= True, help='commit svn diff stats in specific dirs')
 # @click.option('-c', '--count', is_flag=True, help='count how many lines of code you have writen today')
-def todo(show_todo, show_done, add_todo, edit_todo, kill):
+def todo(show_todo, show_done, show_all, add_todo, edit_todo, kill, list_topic, create_topic, switch_current_topic):
     global conn
     conn = cntr.connect(**config)
     if show_todo:
-        manage.show_todo(conn)
+        manage.show_todo(conn, show_all)
     elif show_done:
         manage.show_done(conn)
     elif add_todo:
@@ -36,6 +40,12 @@ def todo(show_todo, show_done, add_todo, edit_todo, kill):
         manage.edit_todo(conn, edit_todo)
     elif len(kill):
         manage.kill_todo(conn, kill)
+    elif list_topic:
+        manage.list_topic(conn)
+    elif len(create_topic) > 0:
+        manage.create_topic(conn, create_topic)
+    elif len(switch_current_topic):
+        manage.switch_topic(conn, switch_current_topic)
     # elif len(commit) > 0:
         # manage.commit_diff_stat(conn, commit)
     # elif count:
