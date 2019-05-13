@@ -17,7 +17,7 @@ global conn
 
 @click.command()
 @click.option('-s', '--show-todo', is_flag=True, help='show todo list', default=False)
-@click.option('-o', '--show-all', is_flag=True, help='show todo list', default=False)
+@click.option('-o', '--show-all', is_flag=True, help='show all todo list', default=False)
 @click.option('-d', '--show-done', is_flag=True, help='show done list', default=False)
 @click.option('-a', '--add-todo', is_flag=True, help='add new todo', default=False)
 @click.option('-e', '--edit-todo', help='edit a todo', default='')
