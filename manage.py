@@ -1,6 +1,8 @@
 import os
 import subprocess
 import time
+import datetime
+from collections import OrderedDict
 
 def getMonStartTime():
     l = time.localtime(time.time())
@@ -33,6 +35,26 @@ def show_todo(conn, show_all):
         content = content.replace('\n', '\n        ')
         print(" " * 4 + "{}: {}\n        {}".format(id, name, content))
     cursor.close()
+
+def show_trifles(conn):
+    cursor = conn.cursor()
+    query = '''
+    SELECT id, content, created
+    FROM t_trifles
+    ORDER BY created desc
+    '''
+    cursor.execute(query)
+    trifles_dict = OrderedDict()
+    for id, content, created in cursor:
+        date = datetime.datetime.fromtimestamp(int(created.timestamp()))
+        date_str = date.strftime("%Y-%m-%d")
+        if not date_str in trifles_dict:
+            trifles_dict[date_str] = []
+        trifles_dict[date_str].append(content)
+    for key in trifles_dict.keys():
+        print("    {}:".format(key))
+        for content in trifles_dict[key]:
+            print("    {}".format(content))
 
 def show_done(conn):
     cursor = conn.cursor()
@@ -72,6 +94,21 @@ def add_todo(conn):
     insert = "INSERT INTO t_todo (content, topic_id) VALUES ('{}', {})".format(question, current_topic_id)
     cursor.execute(insert)
     print("add todo success")
+    conn.commit()
+    cursor.close()
+
+def add_trifles(conn):
+    cursor = conn.cursor()
+    EDITOR = os.environ.get('EDITOR','vim')
+    file_name = '/tmp/trifiles';
+    subprocess.call([EDITOR, file_name])
+    with open(file_name, 'r') as f:
+        content = f.read()
+    if len(content.strip()) <= 0:
+        return
+    insert = "INSERT INTO t_trifles (content) VALUES('{}')".format(content)
+    cursor.execute(insert)
+    print("add trifles success")
     conn.commit()
     cursor.close()
 
@@ -168,5 +205,6 @@ def count_line_today(conn):
     for (insertions, deletions) in cursor:
         print("today's work")
         print(' ' * 4 + "insertions: {}, deletions: {}".format(insertions, deletions))
+
 
 

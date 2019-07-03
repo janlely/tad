@@ -25,9 +25,11 @@ global conn
 @click.option('-l', '--list-topic', is_flag=True, help='list all topics', default=False)
 @click.option('-c', '--create-topic', help='create a topic', default='')
 @click.option('-w', '--switch-current-topic', help='switch current topic', default='')
+@click.option('-t', '--add-trifles', is_flag=True, help='add trifles beyond todo', default=False)
+@click.option('-r', '--show-trifles', is_flag=True, help='show trifles list', default=False)
 # @click.option('-m', '--commit', multiple= True, help='commit svn diff stats in specific dirs')
 # @click.option('-c', '--count', is_flag=True, help='count how many lines of code you have writen today')
-def todo(show_todo, show_done, show_all, add_todo, edit_todo, kill, list_topic, create_topic, switch_current_topic):
+def todo(show_todo, show_done, show_all, add_todo, edit_todo, kill, list_topic, create_topic, switch_current_topic, add_trifles, show_trifles):
     global conn
     conn = cntr.connect(**config)
     if show_todo:
@@ -46,6 +48,10 @@ def todo(show_todo, show_done, show_all, add_todo, edit_todo, kill, list_topic, 
         manage.create_topic(conn, create_topic)
     elif len(switch_current_topic):
         manage.switch_topic(conn, switch_current_topic)
+    elif add_trifles:
+        manage.add_trifles(conn)
+    elif show_trifles:
+        manage.show_trifles(conn)
     # elif len(commit) > 0:
         # manage.commit_diff_stat(conn, commit)
     # elif count:
