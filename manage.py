@@ -41,7 +41,7 @@ def show_trifles(conn):
     query = '''
     SELECT id, content, created
     FROM t_trifles
-    ORDER BY created desc
+    ORDER BY created
     '''
     cursor.execute(query)
     trifles_dict = OrderedDict()
