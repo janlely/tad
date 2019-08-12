@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.22, for osx10.13 (x86_64)
 --
--- Host: localhost    Database: jay_work
+-- Host: localhost    Database: d_working
 -- ------------------------------------------------------
--- Server version	5.7.17-0ubuntu0.16.04.1
+-- Server version	5.7.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -18,10 +18,6 @@
 --
 -- Table structure for table `t_line`
 --
-
-DROP DATABASE IF EXISTS `d_working`;
-CREATE DATABASE `d_working`;
-USE `d_working`;
 
 DROP TABLE IF EXISTS `t_line`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -46,13 +42,48 @@ DROP TABLE IF EXISTS `t_todo`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_todo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `content` varchar(500) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `answer` varchar(1000) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `content` varchar(500) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0: 未完成, 1:已完成',
+  `answer` varchar(1000) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `topic_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `t_topic`
+--
+
+DROP TABLE IF EXISTS `t_topic`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_topic` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `current` tinyint(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `enable` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `t_trifles`
+--
+
+DROP TABLE IF EXISTS `t_trifles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_trifles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(500) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -64,4 +95,4 @@ CREATE TABLE `t_todo` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-03-06 19:46:29
+-- Dump completed on 2019-08-12  9:08:12
