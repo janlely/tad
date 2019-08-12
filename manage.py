@@ -159,7 +159,7 @@ def list_topic(conn):
 
 def create_topic(conn, topic):
     cursor = conn.cursor()
-    insert = "INSERT INTO t_topic (name) VALUES ({})".format(topic)
+    insert = "INSERT INTO t_topic (name) VALUES ('{}')".format(topic)
     cursor.execute(insert)
     conn.commit()
     cursor.close()
