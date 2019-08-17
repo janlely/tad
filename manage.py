@@ -73,7 +73,8 @@ def show_done(conn):
         if(not flag and int(modified.timestamp()) > t):
             print("    DONE THIS WEEK:")
             flag = not flag
-        answer = answer.replace('\n', '\n        ')
+        answer = answer.replace('\n', '\n' + ' ' * 8)
+        content = content.replace('\n', '\n' + ' ' * 8)
         print(" " * 4 + "{}: {}\n        {}".format(id, topic, content))
         print("        {}".format(answer))
     cursor.close()
