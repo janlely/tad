@@ -33,7 +33,21 @@ def show_todo(conn, show_all):
     print("work to do:")
     for (id, content, name) in cursor:
         content = content.replace('\n', '\n        ')
-        print(" " * 4 + "{}: {}\n        {}".format(id, name, content))
+        print(" " * 4 + "{}: {}\n       {}".format(id, name, content))
+    cursor.close()
+
+
+def show_tips(conn):
+    cursor = conn.cursor()
+    query = '''
+        SELECT id, content
+        FROM t_tips
+    '''
+    cursor.execute(query)
+    print("work to do:")
+    for (id, content) in cursor:
+        content = content.replace('\n', '\n    ')
+        print(" " * 4 + "{}:\n    {}".format(id, content))
     cursor.close()
 
 def show_trifles(conn):
@@ -55,6 +69,7 @@ def show_trifles(conn):
         print("    {}:".format(key))
         for content in trifles_dict[key]:
             print("    {}".format(content))
+
 
 def show_done(conn):
     cursor = conn.cursor()
@@ -110,6 +125,21 @@ def add_trifles(conn):
     insert = "INSERT INTO t_trifles (content) VALUES('{}')".format(content)
     cursor.execute(insert)
     print("add trifles success")
+    conn.commit()
+    cursor.close()
+
+def add_tips(conn):
+    cursor = conn.cursor()
+    EDITOR = os.environ.get('EDITOR','vim')
+    file_name = '/tmp/tips';
+    subprocess.call([EDITOR, file_name])
+    with open(file_name, 'r') as f:
+        content = f.read()
+    if len(content.strip()) <= 0:
+        return
+    insert = "INSERT INTO t_tips (content) VALUES('{}')".format(content)
+    cursor.execute(insert)
+    print("add tips success")
     conn.commit()
     cursor.close()
 
